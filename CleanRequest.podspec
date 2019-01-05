@@ -2,9 +2,6 @@ Pod::Spec.new do |s|
 s.name         = "CleanRequest"
 s.version      = "1.0.0"
 s.summary      = "Network based on Moya"
-s.description  = <<-DESC
-Easy to use Moya.
-DESC
 s.homepage     = "https://github.com/wangcy90/CleanRequest"
 s.license          = { :type => 'MIT', :file => 'LICENSE' }
 s.author           = { 'WangChongyang' => 'chongyangfly@163.com' }
