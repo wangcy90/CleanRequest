@@ -12,12 +12,13 @@
 //
 
 import Moya
+import CleanRequest
 
 enum GitHubAPI {
     case zen
 }
 
-extension GitHubAPI: TargetType {
+extension GitHubAPI: RequestTargetType {
     
     var baseURL: URL {
         return URL(string: "https://api.github.com")!

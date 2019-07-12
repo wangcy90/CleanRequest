@@ -13,8 +13,6 @@
 
 import UIKit
 import CleanRequest
-import Moya
-import SwiftyJSON
 import RxSwift
 
 class ViewController: UIViewController {
@@ -61,13 +59,13 @@ class ViewController: UIViewController {
     
     func rxRequest() {
         
-        GitHubAPI.zen.request().subscribe(onSuccess: { (response) in
+        GitHubAPI.zen.rx.request().subscribe(onSuccess: { (response) in
             debugPrint(response)
         }) { (error) in
             debugPrint(error)
         }.disposed(by: disposeBag)
         
-        GitHubAPI.zen.request().mapSwiftyJSON().subscribe(onSuccess: { (json) in
+        GitHubAPI.zen.rx.request().mapSwiftyJSON().subscribe(onSuccess: { (json) in
             debugPrint(json)
         }) { (error) in
             debugPrint(error)

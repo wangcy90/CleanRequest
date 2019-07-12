@@ -12,7 +12,6 @@
 //
 
 import Moya
-import Alamofire
 import HandyJSON
 import SwiftyJSON
 
@@ -36,85 +35,6 @@ public final class CleanRequest {
         
     }
     
-}
-
-public extension TargetType {
-    
-    typealias Progress = (ProgressResponse) -> ()
-    
-    typealias Failure = (Error) -> ()
-    
-    @discardableResult
-    public func request(success: ((Response) -> ())? = nil,
-                        progress: Progress? = nil,
-                        failure: Failure? = nil) -> Cancellable {
-        
-        return CleanRequest.provider.request(MultiTarget(self), progress: progress) {
-            
-            switch $0 {
-            case let .success(response):
-                success?(response)
-            case let .failure(error):
-                failure?(error)
-            }
-            
-        }
-        
-    }
-
-    @discardableResult
-    public func requestJSON(success: ((JSON) -> ())? = nil,
-                            progress: Progress? = nil,
-                            failure: Failure? = nil) -> Cancellable {
-
-        return request(success: {
-            
-            do {
-                success?(try $0._mapSwiftyJSON())
-            }catch {
-                failure?(error)
-            }
-            
-        }, progress: progress, failure: failure)
-        
-    }
-    
-    @discardableResult
-    public func requestObject<T: HandyJSON>(path: String? = nil,
-                                            success: ((T) -> ())? = nil,
-                                            progress: Progress? = nil,
-                                            failure: Failure? = nil) -> Cancellable {
-        
-        return request(success: {
-            
-            do {
-                success?(try $0._mapObject(T.self, path: path))
-            }catch {
-                failure?(error)
-            }
-            
-        }, progress: progress, failure: failure)
-        
-    }
-    
-    @discardableResult
-    public func requestObjectArray<T: HandyJSON>(path: String? = nil,
-                                                 success: (([T]) -> ())? = nil,
-                                                 progress: Progress? = nil,
-                                                 failure: Failure? = nil) -> Cancellable {
-        
-        return request(success: {
-            
-            do {
-                success?(try $0._mapObjectArray(T.self, path: path))
-            }catch {
-                failure?(error)
-            }
-            
-        }, progress: progress, failure: failure)
-        
-    }
-
 }
 
 extension Moya.Response {

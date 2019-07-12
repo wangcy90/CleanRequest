@@ -16,29 +16,29 @@ import RxSwift
 import HandyJSON
 import SwiftyJSON
 
-public extension TargetType  {
+public extension Reactive where Base: RequestTargetType {
     
-    public func request() -> Single<Response> {
-        return CleanRequest.provider.rx.request(MultiTarget(self))
+    func request() -> Single<Response> {
+        return Single.just(MultiTarget(base)).flatMap { CleanRequest.provider.rx.request($0) }
     }
     
 }
 
 public extension PrimitiveSequence where TraitType == SingleTrait, ElementType == Moya.Response {
     
-    public func mapSwiftyJSON() -> Single<JSON> {
+    func mapSwiftyJSON() -> Single<JSON> {
         return flatMap { response -> Single<JSON> in
             return .just(try response._mapSwiftyJSON())
         }
     }
     
-    public func mapObject<T: HandyJSON>(_ type: T.Type, path: String? = nil) -> Single<T> {
+    func mapObject<T: HandyJSON>(_ type: T.Type, path: String? = nil) -> Single<T> {
         return flatMap { response -> Single<T> in
             return .just(try response._mapObject(T.self, path: path))
         }
     }
     
-    public func mapObjectArray<T: HandyJSON>(_ type: T.Type, path: String? = nil) -> Single<[T]> {
+    func mapObjectArray<T: HandyJSON>(_ type: T.Type, path: String? = nil) -> Single<[T]> {
         return flatMap { response -> Single<[T]> in
             return .just(try response._mapObjectArray(T.self, path: path))
         }
@@ -48,13 +48,13 @@ public extension PrimitiveSequence where TraitType == SingleTrait, ElementType =
 
 public extension PrimitiveSequence where TraitType == SingleTrait, ElementType == JSON {
     
-    public func mapObject<T: HandyJSON>(_ type: T.Type, path: String? = nil) -> Single<T> {
+    func mapObject<T: HandyJSON>(_ type: T.Type, path: String? = nil) -> Single<T> {
         return flatMap { json -> Single<T> in
             return .just(try json._mapObject(T.self, path: path))
         }
     }
     
-    public func mapObjectArray<T: HandyJSON>(_ type: T.Type, path: String? = nil) -> Single<[T]> {
+    func mapObjectArray<T: HandyJSON>(_ type: T.Type, path: String? = nil) -> Single<[T]> {
         return flatMap { json -> Single<[T]> in
             return .just(try json._mapObjectArray(T.self, path: path))
         }
